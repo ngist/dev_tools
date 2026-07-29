@@ -10,4 +10,4 @@ To install:
 ```
 git clone git@github.com:ngist/dev_tools.git
 sudo ./dev_tools/auto_shutdown/install.sh
-`` 
+```
