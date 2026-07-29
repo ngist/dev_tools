@@ -1,0 +1,7 @@
+[Unit]  
+Description=Checks if there was an active login within the last hour if not shuts down.
+After=network.target
+ 
+[Service]  
+Type=simple
+ExecStart=/opt/auto_shutdown.sh
