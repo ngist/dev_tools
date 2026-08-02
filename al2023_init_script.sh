@@ -24,7 +24,7 @@ test -f /usr/local/lib/docker/cli-plugins/docker-compose \
   && sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
 ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$ARCH" | cut -d '"' -f 4)
+BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$ARCH" | cut -d '"' -f 4 | head -n 1)
 
 curl -sL $BUILDX_URL -o /usr/local/lib/docker/cli-plugins/docker-buildx
 
