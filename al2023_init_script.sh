@@ -14,19 +14,20 @@ systemctl enable docker
 usermod -aG docker ec2-user
 
 echo "Manually installing docker compose plugin and buildx"
-mkdir -p /usr/local/lib/docker/cli-plugins
+PLUGIN_DIR=/usr/libexec/docker/cli-plugins
+mkdir -p $PLUGIN_DIR
 
 sudo curl -sL https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s)-$(uname -m) \
-  -o /usr/local/lib/docker/cli-plugins/docker-compose
+  -o $PLUGIN_DIR/docker-compose
 
 # Set ownership to root and make executable
-test -f /usr/local/lib/docker/cli-plugins/docker-compose \
-  && sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+test -f $PLUGIN_DIR/docker-compose \
+  && sudo chmod +x $PLUGIN_DIR/docker-compose
 
 ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
 BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$ARCH" | cut -d '"' -f 4 | head -n 1)
 
-curl -sL $BUILDX_URL -o /usr/local/lib/docker/cli-plugins/docker-buildx
+curl -sL $BUILDX_URL -o $PLUGIN_DIR/docker-buildx
 
 cat <<'EOF2' > /etc/ssh/ssh_known_hosts
 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
