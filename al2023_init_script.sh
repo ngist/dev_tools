@@ -26,7 +26,7 @@ test -f /usr/local/lib/docker/cli-plugins/docker-compose \
 ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
 BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$ARCH" | cut -d '"' -f 4)
 
-curl -L $BUILDX_URL -o /usr/local/lib/docker/cli-plugins/docker-buildx
+curl -sL $BUILDX_URL -o /usr/local/lib/docker/cli-plugins/docker-buildx
 
 cat <<'EOF2' > /etc/ssh/ssh_known_hosts
 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
