@@ -16,7 +16,7 @@ usermod -aG docker ec2-user
 echo "Manually installing docker compose plugin and buildx"
 latest_plugin_vers() {
     plugin=$1
-    vers=$(curl -s https://api.github.com/repos/docker/$plugin/releases/latest | jq '.tag_name')
+    vers=$(curl -s https://api.github.com/repos/docker/$plugin/releases/latest | jq -r '.tag_name')
     echo $vers
 }
 
