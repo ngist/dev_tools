@@ -14,23 +14,33 @@ systemctl enable docker
 usermod -aG docker ec2-user
 
 echo "Manually installing docker compose plugin and buildx"
+latest_plugin_vers() {
+    plugin=$1
+    vers=$(curl -s https://api.github.com/repos/docker/$plugin/releases/latest | jq '.tag_name')
+    echo $vers
+}
+
 PLUGIN_DIR=/usr/libexec/docker/cli-plugins
 mkdir -p $PLUGIN_DIR
 
-PLATFORM=$(uname -s)
-PLATFORM=${PLATFORM,,}
+platform=$(uname -s)
+platform=${platform,,}
 arch=$(uname -m)
-sudo curl -sL https://github.com/docker/compose/releases/download/latest/docker-compose-$PLATFORM-$arch \
-  -o $PLUGIN_DIR/docker-compose
+arch_munged=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
 
+COMPOSE_VER=$(latest_plugin_vers compose)
+COMPOSE_URL="https://github.com/docker/compose/releases/download/$COMPOSE_VER/docker-compose-$platform-$arch"
+curl -sL $COMPOSE_URL -o $PLUGIN_DIR/docker-compose
 # Set ownership to root and make executable
 test -f $PLUGIN_DIR/docker-compose \
   && sudo chmod +x $PLUGIN_DIR/docker-compose
 
-arch=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$arch" | cut -d '"' -f 4 | head -n 1)
-
+BUILDX_VER=$(latest_plugin_vers buildx)
+BUILDX_URL="https://github.com/docker/buildx/releases/download/$BUILDX_VER/buildx-$BUILDX_VER.$platform-$arch_munged"
 curl -sL $BUILDX_URL -o $PLUGIN_DIR/docker-buildx
+# Set ownership to root and make executable
+test -f $PLUGIN_DIR/docker-buildx \
+  && sudo chmod +x $PLUGIN_DIR/docker-buildx
 
 cat <<'EOF2' > /etc/ssh/ssh_known_hosts
 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
