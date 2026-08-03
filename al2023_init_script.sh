@@ -33,14 +33,14 @@ COMPOSE_URL="https://github.com/docker/compose/releases/download/$COMPOSE_VER/do
 curl -sL $COMPOSE_URL -o $PLUGIN_DIR/docker-compose
 # Set ownership to root and make executable
 test -f $PLUGIN_DIR/docker-compose \
-  && sudo chmod +x $PLUGIN_DIR/docker-compose
+  && chmod +x $PLUGIN_DIR/docker-compose
 
 BUILDX_VER=$(latest_plugin_vers buildx)
 BUILDX_URL="https://github.com/docker/buildx/releases/download/$BUILDX_VER/buildx-$BUILDX_VER.$platform-$arch_munged"
 curl -sL $BUILDX_URL -o $PLUGIN_DIR/docker-buildx
 # Set ownership to root and make executable
 test -f $PLUGIN_DIR/docker-buildx \
-  && sudo chmod +x $PLUGIN_DIR/docker-buildx
+  && chmod +x $PLUGIN_DIR/docker-buildx
 
 cat <<'EOF2' > /etc/ssh/ssh_known_hosts
 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
