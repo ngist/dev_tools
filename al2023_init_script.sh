@@ -53,9 +53,8 @@ chmod 600 /home/ec2-user/.ssh/id_ed25519
 chown ec2-user:ec2-user /home/ec2-user/.ssh/id_ed25519
 
 # Setup git
-sudo su ec2-user
-# git config --global user.name "NAME"
-# git config --global user.email "EMAIL"
-git config --global alias.co checkout
-git config --global alias.br branch
-git config --global alias.st status
+# sudo -u ec2-user git config --global user.name "NAME"
+# sudo -u ec2-user git config --global user.email "EMAIL"
+sudo -u ec2-user git config --global alias.co checkout
+sudo -u ec2-user git config --global alias.br branch
+sudo -u ec2-user git config --global alias.st status
