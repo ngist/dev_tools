@@ -9,5 +9,4 @@ cp $src_dir/auto_shutdown.service /etc/systemd/system/auto_shutdown.service
 cp $src_dir/auto_shutdown.timer /etc/systemd/system/auto_shutdown.timer
 
 systemctl daemon reload
-systemctl enable auto_shutdown.service
 systemctl enable auto_shutdown.timer
