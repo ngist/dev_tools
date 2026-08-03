@@ -44,8 +44,9 @@ codeberg.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8hZi7K1/2E2uBX8gwPRJAHvRAob+
 codeberg.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIVIC02vnjFyL+I4RHfvIGNtOgJMe769VTF1VR4EB3ZB
 EOF2
 
-git clone https://github.com/ngist/dev_tools.git
-/home/ec2-user/dev_tools/auto_shutdown/install.sh
+git clone https://github.com/ngist/dev_tools.git /tmp/dev_tools
+/tmp/dev_tools/auto_shutdown/install.sh
+rm -rf /tmp/dev_tools
 
 # Get Github credentials
 aws ssm get-parameter --name GitHubKeyForDevBox --with-decryption --query "Parameter.Value" --output text > /home/ec2-user/.ssh/id_ed25519
