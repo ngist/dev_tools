@@ -1,5 +1,5 @@
 #!/bin/bash
-dnf install -y git pip docker
+dnf install -y git pip docker jq
 
 # Setup git
 # git config --global user.name "NAME"
@@ -17,15 +17,18 @@ echo "Manually installing docker compose plugin and buildx"
 PLUGIN_DIR=/usr/libexec/docker/cli-plugins
 mkdir -p $PLUGIN_DIR
 
-sudo curl -sL https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s)-$(uname -m) \
+PLATFORM=$(uname -s)
+PLATFORM=${PLATFORM,,}
+arch=$(uname -m)
+sudo curl -sL https://github.com/docker/compose/releases/download/latest/docker-compose-$PLATFORM-$arch \
   -o $PLUGIN_DIR/docker-compose
 
 # Set ownership to root and make executable
 test -f $PLUGIN_DIR/docker-compose \
   && sudo chmod +x $PLUGIN_DIR/docker-compose
 
-ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$ARCH" | cut -d '"' -f 4 | head -n 1)
+arch=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+BUILDX_URL=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep "browser_download_url.*linux-$arch" | cut -d '"' -f 4 | head -n 1)
 
 curl -sL $BUILDX_URL -o $PLUGIN_DIR/docker-buildx
 
