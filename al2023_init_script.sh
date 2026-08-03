@@ -1,13 +1,6 @@
 #!/bin/bash
 dnf install -y git pip docker jq
 
-# Setup git
-# git config --global user.name "NAME"
-# git config --global user.email "EMAIL"
-git config --global alias.co checkout
-git config --global alias.br branch
-git config --global alias.st status
-
 # Setup docker
 systemctl start docker
 systemctl enable docker
@@ -58,3 +51,10 @@ git clone https://github.com/ngist/dev_tools.git
 aws ssm get-parameter --name GitHubKeyForDevBox --with-decryption --query "Parameter.Value" --output text > /home/ec2-user/.ssh/id_ed25519
 chmod 600 /home/ec2-user/.ssh/id_ed25519
 chown ec2-user:ec2-user /home/ec2-user/.ssh/id_ed25519
+
+# Setup git
+# git config --global user.name "NAME"
+# git config --global user.email "EMAIL"
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.st status
