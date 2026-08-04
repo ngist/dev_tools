@@ -4,4 +4,4 @@ After=network.target
  
 [Service]  
 Type=simple
-ExecStart="/opt/auto_shutdown.sh ec2-user"
+ExecStart=/opt/auto_shutdown.sh ec2-user
