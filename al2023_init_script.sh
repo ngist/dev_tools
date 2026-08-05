@@ -67,3 +67,4 @@ chown ec2-user:ec2-user /home/ec2-user/.ssh/id_ed25519
 sudo -u ec2-user git config --global alias.co checkout
 sudo -u ec2-user git config --global alias.br branch
 sudo -u ec2-user git config --global alias.st status
+sudo -u ec2-user git config --global pull.rebase true
