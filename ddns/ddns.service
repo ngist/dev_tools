@@ -1,0 +1,9 @@
+[Unit]
+After=network.target
+
+[Service]
+ExecStart=/opt/ddns.sh
+Type=OneShot
+
+[Install]
+WantedBy=multi-user.target
