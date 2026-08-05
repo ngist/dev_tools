@@ -12,8 +12,8 @@ mkdir -p /etc/systemd/system/ddns.service.d
 # Configure service env variables
 cat <<EOF >/etc/systemd/system/ddns.service.d/local.conf
 [Service]
-DOMAIN=$DOMAIN
-ZONE_ID=$ZONE_ID
+Environment="DOMAIN=$DOMAIN"
+Environment="ZONE_ID=$ZONE_ID"
 EOF
 
 systemctl daemon-reload
