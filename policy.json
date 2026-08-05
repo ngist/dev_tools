@@ -1,0 +1,18 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "ReadSpecificParameterPath",
+			"Effect": "Allow",
+			"Action": [
+				"ssm:GetParameter",
+				"ssm:GetParameters",
+				"ssm:GetParameterHistory"
+			],
+			"Resource": [
+				"arn:aws:ssm:*:[AWS_ACCT]:parameter/GitHubKeyForDevBox",
+				"arn:aws:ssm:*:[AWS_ACCT]:parameter/DevBoxConfig"
+			]
+		}
+	]
+}
