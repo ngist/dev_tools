@@ -1,7 +1,7 @@
 #!/bin/bash
 IP4=`curl -4 ipv4.icanhazip.com`
 IP6=`curl -6 ipv6.icanhazip.com`
-cat <<EOF >/tmp/dev_tools/change_set.json
+cat <<EOF >/opt/change_set.json
 {
   "Comment": "Add record to point to EC2 instance",
   "Changes": [
@@ -35,4 +35,4 @@ cat <<EOF >/tmp/dev_tools/change_set.json
 }
 EOF
 
-aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch file:///tmp/dev_tools/change_set.json
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch file:///opt/change_set.json
