@@ -1,5 +1,5 @@
 [Unit]
-Requires=network.target
+Requires=network-online.target
 
 [Service]
 ExecStart=/opt/ddns.sh
