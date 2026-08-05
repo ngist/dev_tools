@@ -44,15 +44,15 @@ codeberg.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8hZi7K1/2E2uBX8gwPRJAHvRAob+
 codeberg.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIVIC02vnjFyL+I4RHfvIGNtOgJMe769VTF1VR4EB3ZB
 EOF2
 
-CONF_FILE=/tmp/dev_tools/conf.json
+CONF_FILE=/tmp/conf.json
 aws ssm get-parameter --name DevBoxConfig --query "Parameter.Value" | jq '.|fromjson' > $CONF_FILE
-DOMAIN=$(jq -r '.DOMAIN' <"$CONF_FILE")
-ZONE_ID=$(jq -r '.ZONE_ID' <"$CONF_FILE")
 
 git clone https://github.com/ngist/dev_tools.git /tmp/dev_tools
 # Install auto_shutdown service, it shuts the instance down when idle for ~1hr.
 /tmp/dev_tools/auto_shutdown/install.sh
 # Install ddns service so that the instance can be accessed by a consistent domain name without needing to check at every start.
+DOMAIN=$(jq -r '.DOMAIN' <"$CONF_FILE")
+ZONE_ID=$(jq -r '.ZONE_ID' <"$CONF_FILE")
 /tmp/dev_tools/ddns/install.sh $DOMAIN $ZONE_ID
 rm -rf /tmp/dev_tools
 
@@ -70,3 +70,6 @@ sudo -u ec2-user git config --global alias.co checkout
 sudo -u ec2-user git config --global alias.br branch
 sudo -u ec2-user git config --global alias.st status
 sudo -u ec2-user git config --global pull.rebase true
+
+rm $CONF_FILE
+
