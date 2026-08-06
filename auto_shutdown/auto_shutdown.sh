@@ -10,15 +10,19 @@ if [ -z $user ]; then
 fi
 
 time="$(date --date='1 hour ago' '+%Y-%m-%d %H:%M:%S')"
-was_logged_in_hour_ago=`last --present "$time" | grep $user`
-has_logged_in_within_last_hour=`last --since "$time" | grep $user`
+was_logged_in_hour_ago=$(last --present "$time" | grep $user)
+has_logged_in_within_last_hour=$(last --since "$time" | grep $user)
+booted_within_last_hour=$(last --since "$time" | grep reboot)
 
 if test "$was_logged_in_hour_ago" != ""; then
     echo $was_logged_in_hour_ago
-    echo "Active user detected in the last hour... staying alive"
-elif test "$has_logged_in_within_last_hour"; then
+    echo "User was logged in an hour ago or less... staying alive"
+elif test "$has_logged_in_within_last_hour" != ""; then
     echo $has_logged_in_within_last_hour
-    echo "Active user detected in the last hour... statying alive"
+    echo "User logged in within the last hour... staying alive"
+elif test "$booted_within_last_hour" != ""; then
+    echo $booted_within_last_hour
+    echo "Instance booted within the last hour... staying alive"
 else
     echo "No active user in last hour shutting down..."
     shutdown -h now
