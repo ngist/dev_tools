@@ -22,3 +22,6 @@ sed -i 's/#ClientAliveCountMax 3/ClientAliveCountMax 3/g' /etc/ssh/sshd_config
 echo "Reloading sshd.service..."
 systemctl reload sshd.service
 
+# If more aggressive disconnect is needed auto log out idle sessions.
+# cp $src_dir/timeout.sh /etc/profile.d/timeout.sh
+
