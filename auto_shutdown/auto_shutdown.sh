@@ -21,7 +21,12 @@ has_logged_in_within_last_hour=$(last --since "$hour_ago" | grep $user)
 
 # Checks for vscode sessions
 active_vscode_session=$(lsof -i | grep $user | grep ESTABLISHED)
-last_activity_vscode=$(du -sh --time /home/$user/.vscode-server | cut -f 2 | date +%s)
+last_activity_vscode=$(du -sh --time /home/$user/.vscode-server | cut -f 2)
+if test "$last_activity_vscode"; then
+    last_activity_vscode=$(date -d "$last_activity_code" +%s)
+else
+    last_activity_vscode=0
+fi
 
 if test "$was_logged_in_hour_ago"; then
     echo $was_logged_in_hour_ago
