@@ -37,7 +37,7 @@ elif test "$has_logged_in_within_last_hour"; then
 elif test "$active_vscode_session"; then
     echo $active_vscode_session
     echo "Active VSCODE session detected... staying alive"
-elif test "$last_activity_vscode" > "$timestamp_hour_ago"; then
+elif (( $last_activity_vscode > $timestamp_hour_ago )); then
     echo "$last_activity_vscode > $timestamp_hour_ago"
     echo "VSCODE session detected within last hour... staying alive"
 elif test "$booted_within_last_hour"; then
