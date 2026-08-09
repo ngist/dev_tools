@@ -28,7 +28,10 @@ else
     last_activity_vscode=0
 fi
 
-if test "$was_logged_in_hour_ago"; then
+if test "$booted_within_last_hour"; then
+    echo $booted_within_last_hour
+    echo "Instance booted within the last hour... staying alive"
+elif test "$was_logged_in_hour_ago"; then
     echo $was_logged_in_hour_ago
     echo "User was logged in an hour ago or less... staying alive"
 elif test "$has_logged_in_within_last_hour"; then
@@ -40,9 +43,6 @@ elif test "$active_vscode_session"; then
 elif (( $last_activity_vscode > $timestamp_hour_ago )); then
     echo "$last_activity_vscode > $timestamp_hour_ago"
     echo "VSCODE session detected within last hour... staying alive"
-elif test "$booted_within_last_hour"; then
-    echo $booted_within_last_hour
-    echo "Instance booted within the last hour... staying alive"
 else
     echo "No active user in last hour shutting down..."
     shutdown -h now
