@@ -1,39 +1,5 @@
 #!/bin/bash
-dnf install -y git pip docker jq
-
-# Setup docker
-systemctl start docker
-systemctl enable docker
-usermod -aG docker ec2-user
-
-echo "Manually installing docker compose plugin and buildx"
-latest_plugin_vers() {
-    plugin=$1
-    vers=$(curl -s https://api.github.com/repos/docker/$plugin/releases/latest | jq -r '.tag_name')
-    echo $vers
-}
-
-PLUGIN_DIR=/usr/libexec/docker/cli-plugins
-mkdir -p $PLUGIN_DIR
-
-platform=$(uname -s)
-platform=${platform,,}
-arch=$(uname -m)
-arch_munged=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-
-COMPOSE_VER=$(latest_plugin_vers compose)
-COMPOSE_URL="https://github.com/docker/compose/releases/download/$COMPOSE_VER/docker-compose-$platform-$arch"
-curl -sL $COMPOSE_URL -o $PLUGIN_DIR/docker-compose
-# Set ownership to root and make executable
-test -f $PLUGIN_DIR/docker-compose \
-  && chmod +x $PLUGIN_DIR/docker-compose
-
-BUILDX_VER=$(latest_plugin_vers buildx)
-BUILDX_URL="https://github.com/docker/buildx/releases/download/$BUILDX_VER/buildx-$BUILDX_VER.$platform-$arch_munged"
-curl -sL $BUILDX_URL -o $PLUGIN_DIR/docker-buildx
-# Set ownership to root and make executable
-test -f $PLUGIN_DIR/docker-buildx \
-  && chmod +x $PLUGIN_DIR/docker-buildx
+dnf install -y git pip jq
 
 cat <<'EOF2' > /etc/ssh/ssh_known_hosts
 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
@@ -48,12 +14,17 @@ CONF_FILE=/tmp/conf.json
 aws ssm get-parameter --name DevBoxConfig --query "Parameter.Value" | jq '.|fromjson' > $CONF_FILE
 
 git clone https://github.com/ngist/dev_tools.git /tmp/dev_tools
-# Install auto_shutdown service, it shuts the instance down when idle for ~1hr.
-/tmp/dev_tools/auto_shutdown/install.sh
+
 # Install ddns service so that the instance can be accessed by a consistent domain name without needing to check at every start.
 DOMAIN=$(jq -r '.DOMAIN' <"$CONF_FILE")
 ZONE_ID=$(jq -r '.ZONE_ID' <"$CONF_FILE")
 /tmp/dev_tools/ddns/install.sh $DOMAIN $ZONE_ID
+
+# Install auto_shutdown service, it shuts the instance down when idle for ~1hr.
+/tmp/dev_tools/auto_shutdown/install.sh
+
+#Install docker
+/tmp/dev_tools/install_docker_al2023.sh
 rm -rf /tmp/dev_tools
 
 # Get Github credentials
