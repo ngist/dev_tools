@@ -1,6 +1,9 @@
 #!/bin/bash
 
 src_dir=`dirname "$0"`
+
+#TODO make this handle multiple domains...
+
 DOMAIN=$1
 ZONE_ID=$2
 
